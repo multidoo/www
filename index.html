@@ -242,25 +242,29 @@
             <!-- Template dla pojedynczego modułu -->
             <template id="module-template">
                 <div class="module-item">
-                    <h3>{name}</h3>
-                    <p>{description}</p>
-                    <div class="module-specs">
-                        {specs}
+                    <div class="module-content">
+                        <h3 class="module-title">{name}</h3>
+                        <p class="module-description">{description}</p>
+                        <div class="module-specs">
+                            {specs}
+                        </div>
                     </div>
-                    <div class="module-price">
-                        {price} {currencySymbol}
-                    </div>
-                    <div class="quantity-control">
-                        <button class="quantity-button minus" {disabledMinus}>-</button>
-                        <input type="number" 
-                               class="quantity-input module-qty" 
-                               value="{defaultValue}"
-                               min="{minQuantity}"
-                               max="{maxQuantity}"
-                               data-height="{height}"
-                               data-price="{price}"
-                               {readonly}>
-                        <button class="quantity-button plus" {disabledPlus}>+</button>
+                    <div class="module-bottom">
+                        <div class="module-price">
+                            {currencySymbol}{price}
+                        </div>
+                        <div class="quantity-control">
+                            <button class="quantity-button minus" {disabledMinus}>-</button>
+                            <input type="number" 
+                                   class="quantity-input module-qty" 
+                                   value="{defaultValue}"
+                                   min="{minQuantity}"
+                                   max="{maxQuantity}"
+                                   data-height="{height}"
+                                   data-price="{price}"
+                                   {readonly}>
+                            <button class="quantity-button plus" {disabledPlus}>+</button>
+                        </div>
                     </div>
                 </div>
             </template>
