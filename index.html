@@ -123,8 +123,34 @@
     <div class="configurator">
         <h1>MULTIDOO - Infrastructure for Things</h1>
         <h2>Configure Your Tower</h2>
+        
+
         <div id="module-list" class="module-list">
-            <!-- Modules will be inserted here by JavaScript -->
+            <!-- Template dla pojedynczego modułu -->
+            <template id="module-template">
+                <div class="module-item">
+                    <h3>{name}</h3>
+                    <p>{description}</p>
+                    <div class="module-specs">
+                        {specs}
+                    </div>
+                    <div class="module-price">
+                        {currencySymbol}{price}
+                    </div>
+                    <div class="quantity-control">
+                        <button class="quantity-button minus" {disabledMinus}>-</button>
+                        <input type="number" 
+                               class="quantity-input module-qty" 
+                               value="{defaultValue}"
+                               min="{minQuantity}"
+                               max="{maxQuantity}"
+                               data-height="{height}"
+                               data-price="{price}"
+                               {readonly}>
+                        <button class="quantity-button plus" {disabledPlus}>+</button>
+                    </div>
+                </div>
+            </template>
         </div>
 
         <div class="total-height">
@@ -484,41 +510,78 @@
         //"currency": "EUR",
   //"currencySymbol": "€"
 
-        // Generate module HTML
         function createModuleHTML(module) {
-            return `
-                <div class="module-item" data-module-id="${module.id}">
-                    <h3>${module.name}</h3>
-                    <p>${module.description}</p>
-                    <p class="module-specs">
-                        ${module.specs.map(spec => `- ${spec}<br>`).join('')}
-                    </p>
-                    <p>Price: ${module.price} ${modulesConfig.currencySymbol}</p>
-                    <label>Quantity: <input type="number" 
-                        min="${module.minQuantity}" 
-                        max="${module.maxQuantity}" 
-                        value="${module.minQuantity}"
-                        ${module.required ? 'readonly' : ''}
-                        class="module-qty"
-                        data-height="${module.height}"
-                        data-price="${module.price}">
-                    </label>
-                </div>
-            `;
+            const template = document.getElementById('module-template').innerHTML;
+            const specs = module.specs.map(spec => `<div>• ${spec}</div>`).join('');
+            
+            return template
+                .replace('{name}', module.name)
+                .replace('{description}', module.description)
+                .replace('{specs}', specs)
+                .replace('{currencySymbol}', modulesConfig.currencySymbol)
+                .replace('{price}', module.price)
+                .replace('{defaultValue}', module.minQuantity)
+                .replace('{minQuantity}', module.minQuantity)
+                .replace('{maxQuantity}', module.maxQuantity)
+                .replace('{height}', module.height)
+                .replace('{price}', module.price)
+                .replace('{readonly}', module.required ? 'readonly' : '')
+                .replace('{disabledMinus}', module.required ? 'disabled' : '')
+                .replace('{disabledPlus}', module.required ? 'disabled' : '');
         }
 
-        // Initialize configuration
+        function handleQuantityButton(e) {
+            if (!e.target.classList.contains('quantity-button')) return;
+            
+            const input = e.target.parentNode.querySelector('.quantity-input');
+            const isPlus = e.target.classList.contains('plus');
+            const currentValue = parseInt(input.value);
+            const min = parseInt(input.min);
+            const max = parseInt(input.max);
+            
+            let newValue = isPlus ? currentValue + 1 : currentValue - 1;
+            newValue = Math.max(min, Math.min(newValue, max));
+            
+            input.value = newValue;
+            updateTotals();
+            updateButtonStates(input);
+        }
+
+        function updateButtonStates(input) {
+            const container = input.parentNode;
+            const minusBtn = container.querySelector('.minus');
+            const plusBtn = container.querySelector('.plus');
+            const value = parseInt(input.value);
+            
+            minusBtn.disabled = value <= parseInt(input.min);
+            plusBtn.disabled = value >= parseInt(input.max);
+        }
+
+        function initializeModule(moduleElement) {
+            const quantityControl = moduleElement.querySelector('.quantity-control');
+            const input = moduleElement.querySelector('.quantity-input');
+            
+            quantityControl.addEventListener('click', handleQuantityButton);
+            input.addEventListener('change', () => {
+                updateTotals();
+                updateButtonStates(input);
+            });
+            
+            updateButtonStates(input);
+        }
+
         function initializeConfigurator() {
             const moduleList = document.getElementById('module-list');
-            moduleList.innerHTML = modulesConfig.modules.map(createModuleHTML).join('');
+            moduleList.innerHTML = modulesConfig.modules
+                .map(module => createModuleHTML(module))
+                .join('');
             
-            const moduleInputs = document.querySelectorAll('.module-qty');
-            moduleInputs.forEach(input => {
-                input.addEventListener('change', updateTotals);
-            });
-
+            const moduleElements = moduleList.querySelectorAll('.module-item');
+            moduleElements.forEach(initializeModule);
+            
             updateTotals();
         }
+        
 
         // Update totals
         function updateTotals() {
