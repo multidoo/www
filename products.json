@@ -1,0 +1,107 @@
+{
+  "modules": [
+    {
+      "id": "base",
+      "name": "Base Module",
+      "description": "Foundation module with stabilization",
+      "specs": [
+        "Heavy-duty PVC construction",
+        "Built-in leveling system",
+        "Weight: 25kg"
+      ],
+      "height": 25,
+      "diameter": 110,
+      "price": 500,
+      "minQuantity": 1,
+      "maxQuantity": 1,
+      "required": true
+    },
+    {
+      "id": "battery",
+      "name": "Battery Module",
+      "description": "48V 100Ah Energy Storage",
+      "specs": [
+        "Li-Ion battery pack",
+        "Integrated BMS",
+        "Weight: 22kg"
+      ],
+      "height": 25,
+      "diameter": 110,
+      "price": 1200,
+      "minQuantity": 0,
+      "maxQuantity": 5,
+      "required": false
+    },
+    {
+      "id": "solar",
+      "name": "Solar Module",
+      "description": "400W PV Panel with MPPT",
+      "specs": [
+        "High-efficiency panels",
+        "360° adjustable mount",
+        "Weight: 18kg"
+      ],
+      "height": 25,
+      "diameter": 110,
+      "price": 800,
+      "minQuantity": 0,
+      "maxQuantity": 5,
+      "required": false
+    },
+    {
+      "id": "camera",
+      "name": "Camera Module",
+      "description": "4K PTZ Security Camera",
+      "specs": [
+        "360° rotation",
+        "Night vision",
+        "Weight: 15kg"
+      ],
+      "height": 25,
+      "diameter": 110,
+      "price": 900,
+      "minQuantity": 0,
+      "maxQuantity": 5,
+      "required": false
+    },
+    {
+      "id": "5g",
+      "name": "5G Module",
+      "description": "5G/LTE Communication Hub",
+      "specs": [
+        "Multi-band support",
+        "Integrated router",
+        "Weight: 16kg"
+      ],
+      "height": 25,
+      "diameter": 110,
+      "price": 1500,
+      "minQuantity": 0,
+      "maxQuantity": 5,
+      "required": false
+    },
+    {
+      "id": "sensor",
+      "name": "Sensor Module",
+      "description": "Environmental Monitoring",
+      "specs": [
+        "Temperature/Humidity",
+        "Air quality",
+        "Weight: 12kg"
+      ],
+      "height": 25,
+      "diameter": 110,
+      "price": 600,
+      "minQuantity": 0,
+      "maxQuantity": 5,
+      "required": false
+    }
+  ],
+  "systemLimits": {
+    "maxTotalHeight": 500,
+    "maxModules": 20,
+    "minModules": 1
+  },
+  "currency": "EUR",
+  "currencySymbol": "€"
+}
